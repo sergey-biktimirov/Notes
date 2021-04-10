@@ -16,7 +16,6 @@ import com.sbiktimirov.geekbrains.lessons.notes.extension.createRecycleViewListA
 import com.sbiktimirov.geekbrains.lessons.notes.viemodel.NoteListViewModel
 
 class NoteListFragment : Fragment() {
-
     private val noteListViewModel: NoteListViewModel by activityViewModels()
     private lateinit var noteListRecycleView: RecyclerView
 
@@ -26,13 +25,14 @@ class NoteListFragment : Fragment() {
     ): View {
         val root: View = inflater.inflate(R.layout.fragment_note_list, container, false)
 
-        val adapter = createRecycleViewListAdapter<NoteData>(R.layout.note_list_item) { view, note ->
-            view.findViewById<TextView>(R.id.note_title).text = note.title
-            view.findViewById<TextView>(R.id.note_date).text = note.date.toString()
-            view.setOnClickListener {
-                showNote(note)
+        val adapter =
+            createRecycleViewListAdapter<NoteData>(R.layout.note_list_item) { view, note ->
+                view.findViewById<TextView>(R.id.note_title).text = note.title
+                view.findViewById<TextView>(R.id.note_date).text = note.date.toString()
+                view.setOnClickListener {
+                    noteListViewModel.showNote(note, this)
+                }
             }
-        }
 
         noteListRecycleView = root.findViewById(R.id.note_list_recycle_view) as RecyclerView
         noteListRecycleView.layoutManager = LinearLayoutManager(context)
@@ -43,22 +43,5 @@ class NoteListFragment : Fragment() {
         }
 
         return root
-    }
-
-    fun showNote(noteData: NoteData) {
-        if(requireActivity().resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, NoteListFragment())
-                .replace(R.id.note_detail_fragment, NoteDetailFragment.newInstance(noteData))
-                .addToBackStack(null)
-                .commit()
-        } else {
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, NoteDetailFragment.newInstance(noteData))
-                .addToBackStack(null)
-                .commit()
-        }
     }
 }
