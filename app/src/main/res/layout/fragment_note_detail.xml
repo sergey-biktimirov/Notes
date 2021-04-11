@@ -32,6 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/date"
+        app:startIconDrawable="@drawable/ic_baseline_calendar_today_balck_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +41,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/note_date"
+            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="datetime"

@@ -37,6 +37,10 @@ class NoteListViewModel : ViewModel() {
         return noteDataRepository.loadNote(uuid)
     }
 
+    fun updateNote() {
+        note.value?.let { noteDataRepository.updateNote(it) }
+    }
+
     // TODO: 10.04.2021 2 Сделать вызов из фрагмента
     fun showNote(uuid: UUID, fragment: Fragment) {
         val note = loadNote(uuid)
