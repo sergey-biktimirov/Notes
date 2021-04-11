@@ -26,6 +26,16 @@ class NoteListViewModel : ViewModel() {
         notes.value = noteList
     }
 
+    // TODO: 11.04.2021 Добавление заметки
+    fun addNote() {
+
+    }
+
+    // TODO: 11.04.2021 Удаление заметки заметки
+    fun deleteNote(uuid: UUID) {
+
+    }
+
     fun loadNote(uuid: UUID): NoteData {
         // TODO: 10.04.2021 1 Добавить загрузку заметки из БД
         return NoteData()
@@ -37,7 +47,7 @@ class NoteListViewModel : ViewModel() {
         showNote(note, fragment)
     }
 
-    // TODO: 10.04.2021 3. Заприватить
+
     fun showNote(noteData: NoteData, fragment: Fragment) {
         if (fragment.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             fragment.requireActivity().supportFragmentManager
