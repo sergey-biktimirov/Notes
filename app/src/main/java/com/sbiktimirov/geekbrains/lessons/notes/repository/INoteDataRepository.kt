@@ -3,9 +3,13 @@ package com.sbiktimirov.geekbrains.lessons.notes.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import com.google.firebase.firestore.FirebaseFirestore
 import com.sbiktimirov.geekbrains.lessons.notes.data.NoteData
+import com.sbiktimirov.geekbrains.lessons.notes.data.toNoteData
 import com.sbiktimirov.geekbrains.lessons.notes.extension.minusAssign
 import com.sbiktimirov.geekbrains.lessons.notes.extension.plusAssign
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 interface INoteDataRepository {
@@ -16,28 +20,45 @@ interface INoteDataRepository {
     fun updateNote(noteData: NoteData): NoteData
 }
 
+private const val NOTES_COLLECTION = "notes"
+
 class NoteDataRepository : INoteDataRepository {
     private val notes = MutableLiveData<List<NoteData>>()
+    private val db = FirebaseFirestore.getInstance()
+    private val notesReference = db.collection(NOTES_COLLECTION)
 
     override fun loadNote(uuid: UUID): NoteData? {
-        return notes.value?.let { notes ->
-            return@let notes.firstOrNull() { note ->
-                note.id == uuid
+        var noteData: NoteData? = null
+        notesReference
+            .whereEqualTo("id", uuid.toString())
+            .get()
+            .addOnCompleteListener {
+                noteData = it.result?.firstOrNull()?.toNoteData()
             }
-        }
+        return noteData
     }
 
     override fun loadNotes(): MutableLiveData<List<NoteData>> {
-        val noteList = mutableListOf<NoteData>()
-        for (i in 1..10) {
-            noteList += NoteData(title = "Note title $i", description = "Note description")
-        }
-        notes.value = noteList
+        notesReference
+            .get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    it.result?.let { res ->
+                        notes.value = res.map {v ->
+                            v.toNoteData()
+                        }
+                    }
+                }
+            }
         return notes
     }
 
     override fun addNote(noteData: NoteData): NoteData {
-        notes += noteData
+        notesReference
+            .add(noteData.toMap())
+            .addOnSuccessListener {
+                notes += noteData
+            }
         return noteData
     }
 
@@ -45,7 +66,12 @@ class NoteDataRepository : INoteDataRepository {
         val note = loadNote(uuid)
 
         note?.let {
-            notes -= it
+            notesReference
+                .document(uuid.toString())
+                .delete()
+                .addOnSuccessListener {
+                    notes -= note
+                }
         }
 
         return note
