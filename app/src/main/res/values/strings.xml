@@ -17,4 +17,7 @@
     <string name="description">Description</string>
     <string name="date">Date</string>
     <string name="title">Title</string>
+    <string name="alert_question_delete_note">Are you really want to delete the note \'%s\'?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>

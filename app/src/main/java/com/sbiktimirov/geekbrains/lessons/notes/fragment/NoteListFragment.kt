@@ -1,5 +1,7 @@
 package com.sbiktimirov.geekbrains.lessons.notes.fragment
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
@@ -68,7 +70,21 @@ class NoteListFragment : Fragment() {
                                 true
                             }
                             R.id.action_delete -> {
-                                noteListViewModel.deleteNote(note.id)
+                                AlertDialog.Builder(context)
+                                    .setTitle(getString(R.string.delete_note))
+                                    .setMessage(
+                                        getString(R.string.alert_question_delete_note).format(
+                                            note.title
+                                        )
+                                    )
+                                    .setCancelable(true)
+                                    .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                        noteListViewModel.deleteNote(note.id)
+                                    }
+                                    .create()
+                                    .show()
+
                                 true
                             }
                             else -> true
