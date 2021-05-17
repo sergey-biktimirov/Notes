@@ -1,10 +1,8 @@
 package com.sbiktimirov.geekbrains.lessons.notes.fragment
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.sbiktimirov.geekbrains.lessons.notes.data.NoteData
@@ -21,6 +19,7 @@ class NoteDetailFragment : Fragment() {
         savedInstanceState?.let {
             arguments = it
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -49,6 +48,21 @@ class NoteDetailFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(NOTE_ID, noteListViewModel.note.value)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu.findItem(R.id.action_delete).isVisible = false
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_delete -> {
+            noteListViewModel.note.value?.let {
+                noteListViewModel.deleteNote(it.id)
+            }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {

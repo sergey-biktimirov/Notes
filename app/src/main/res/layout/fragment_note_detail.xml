@@ -3,37 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/note_detail_constraint"
+    android:hint="@string/title"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.sbiktimirov.geekbrains.lessons.notes.fragment.NoteDetailFragment">
 
-    <TextView
-        android:id="@+id/note_title"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_title_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
 
-    <TextView
-        android:id="@+id/note_date"
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/note_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:textSize="18sp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_date_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="2021-04-05"
+        android:hint="@string/date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/note_title" />
+        app:layout_constraintTop_toBottomOf="@+id/note_title_layout">
 
-    <TextView
-        android:id="@+id/note_description"
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/note_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="datetime"
+            tools:text="2021-04-05" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/note_description_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="Note description"
+        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/note_date" />
+        app:layout_constraintTop_toBottomOf="@+id/note_date_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/note_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            tools:text="Note description" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

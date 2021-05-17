@@ -7,44 +7,42 @@ import androidx.lifecycle.ViewModel
 import com.sbiktimirov.geekbrains.lessons.notes.R
 import com.sbiktimirov.geekbrains.lessons.notes.data.NoteData
 import com.sbiktimirov.geekbrains.lessons.notes.fragment.NoteDetailFragment
+import com.sbiktimirov.geekbrains.lessons.notes.repository.NoteDataRepository
 import java.util.*
 
 class NoteListViewModel : ViewModel() {
-    val notes = MutableLiveData<List<NoteData>>()
+    var notes = MutableLiveData<List<NoteData>>()
 
     val note = MutableLiveData<NoteData>()
+
+    val noteDataRepository = NoteDataRepository()
 
     init {
         loadNotes()
     }
 
     fun loadNotes() {
-        val noteList = mutableListOf<NoteData>()
-        for (i in 1..10) {
-            noteList += NoteData(title = "Note title $i", description = "Note description")
-        }
-        notes.value = noteList
+        notes = noteDataRepository.loadNotes()
     }
 
-    // TODO: 11.04.2021 Добавление заметки
-    fun addNote() {
-
+    fun addNote(): NoteData {
+        return noteDataRepository.addNote(NoteData())
     }
 
-    // TODO: 11.04.2021 Удаление заметки заметки
     fun deleteNote(uuid: UUID) {
-
+        noteDataRepository.deleteNote(uuid)
     }
 
-    fun loadNote(uuid: UUID): NoteData {
-        // TODO: 10.04.2021 1 Добавить загрузку заметки из БД
-        return NoteData()
+    fun loadNote(uuid: UUID): NoteData? {
+        return noteDataRepository.loadNote(uuid)
     }
 
     // TODO: 10.04.2021 2 Сделать вызов из фрагмента
     fun showNote(uuid: UUID, fragment: Fragment) {
         val note = loadNote(uuid)
-        showNote(note, fragment)
+        note?.let {
+            showNote(it, fragment)
+        }
     }
 
 

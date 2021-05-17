@@ -13,4 +13,8 @@
     <string name="app_info_image">App info image</string>
     <string name="app_info">App info</string>
     <string name="app_description">Here will be app description</string>
+    <string name="note_date">Note date</string>
+    <string name="description">Description</string>
+    <string name="date">Date</string>
+    <string name="title">Title</string>
 </resources>
