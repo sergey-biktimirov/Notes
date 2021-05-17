@@ -30,13 +30,32 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/fragment_container_margin"
+            android:layout_marginTop="@dimen/fragment_container_margin"
+            android:layout_marginEnd="@dimen/fragment_container_margin"
+            android:layout_marginBottom="@dimen/fragment_container_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/note_detail_container"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tool_bar"
+            tools:context="com.sbiktimirov.geekbrains.lessons.notes.fragment.NoteListFragment"
+            tools:layout="@layout/fragment_note_list" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/note_detail_container"
+            android:name="com.sbiktimirov.geekbrains.lessons.notes.fragment.NoteDetailFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/fragment_container_margin"
+            android:layout_marginTop="@dimen/fragment_container_margin"
             android:layout_marginEnd="@dimen/fragment_container_margin"
             android:layout_marginBottom="@dimen/fragment_container_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/note_list_container"
             app:layout_constraintTop_toBottomOf="@+id/tool_bar"
-            tools:layout="@layout/fragment_note_list" />
+            tools:layout="@layout/fragment_note_detail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

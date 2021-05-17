@@ -6,20 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import com.sbiktimirov.geekbrains.lessons.notes.data.NoteData
 import com.sbiktimirov.geekbrains.lessons.notes.R
+import com.sbiktimirov.geekbrains.lessons.notes.viemodel.NoteListViewModel
 
 private const val NOTE_ID = "note_id"
 
 class NoteDetailFragment : Fragment() {
-    private var noteData: NoteData? = null
+    private val noteListViewModel: NoteListViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        savedInstanceState?.let {
+            arguments = it
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        arguments?.let{
-            noteData = it.getSerializable(NOTE_ID) as NoteData
+        arguments?.let {
+            noteListViewModel.note.value = it.getSerializable(NOTE_ID) as NoteData?
         }
 
         val root = inflater.inflate(R.layout.fragment_note_detail, container, false)
@@ -30,18 +39,16 @@ class NoteDetailFragment : Fragment() {
     }
 
     private fun updateUI(view: View) {
-        arguments?.let{
-            noteData = it.getSerializable(NOTE_ID) as NoteData
-
-            view.findViewById<TextView>(R.id.note_title).text = noteData?.title
-            view.findViewById<TextView>(R.id.note_date).text = noteData?.date.toString()
-            view.findViewById<TextView>(R.id.note_description).text = noteData?.description
-        }
+        view.findViewById<TextView>(R.id.note_title).text = noteListViewModel.note.value?.title
+        view.findViewById<TextView>(R.id.note_date).text =
+            noteListViewModel.note.value?.date.toString()
+        view.findViewById<TextView>(R.id.note_description).text =
+            noteListViewModel.note.value?.description
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (noteData != null ) outState.putSerializable(NOTE_ID, noteData)
+        outState.putSerializable(NOTE_ID, noteListViewModel.note.value)
     }
 
     companion object {
