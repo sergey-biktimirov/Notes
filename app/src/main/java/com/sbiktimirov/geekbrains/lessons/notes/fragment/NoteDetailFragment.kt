@@ -7,7 +7,12 @@ import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import com.sbiktimirov.geekbrains.lessons.notes.data.NoteData
 import com.sbiktimirov.geekbrains.lessons.notes.R
+import com.sbiktimirov.geekbrains.lessons.notes.extension.getContextDateFormat
+import com.sbiktimirov.geekbrains.lessons.notes.extension.showDatePickerDialog
+import com.sbiktimirov.geekbrains.lessons.notes.extension.stringToDate
 import com.sbiktimirov.geekbrains.lessons.notes.viemodel.NoteListViewModel
+import java.lang.Exception
+import java.util.*
 
 private const val NOTE_ID = "note_id"
 
@@ -19,6 +24,7 @@ class NoteDetailFragment : Fragment() {
         savedInstanceState?.let {
             arguments = it
         }
+
         setHasOptionsMenu(true)
     }
 
@@ -33,14 +39,29 @@ class NoteDetailFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_note_detail, container, false)
 
         updateUI(root)
+        initViews(root)
 
         return root
+    }
+
+    private fun initViews(view: View) {
+        view.findViewById<TextView>(R.id.note_date).setOnClickListener { textView ->
+            val textViewDate: Date = try {
+                stringToDate((textView as TextView).text.toString())
+            } catch (e: Exception) {
+                Date()
+            }
+
+            showDatePickerDialog(textViewDate) {
+                (textView as TextView).text = getContextDateFormat().format(it)
+            }
+        }
     }
 
     private fun updateUI(view: View) {
         view.findViewById<TextView>(R.id.note_title).text = noteListViewModel.note.value?.title
         view.findViewById<TextView>(R.id.note_date).text =
-            noteListViewModel.note.value?.date.toString()
+            getContextDateFormat().format(noteListViewModel.note.value?.date ?: Date())
         view.findViewById<TextView>(R.id.note_description).text =
             noteListViewModel.note.value?.description
     }
@@ -63,6 +84,11 @@ class NoteDetailFragment : Fragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        noteListViewModel.updateNote()
     }
 
     companion object {
